@@ -1,1 +1,1 @@
-require 'js_loggable'
+# Include hook code here

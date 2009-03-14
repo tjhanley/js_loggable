@@ -1,6 +1,8 @@
+# JsLoggable
 module JsLoggable
   
-   def log_javascript
-     
+   def self.log_javascript
+     $stdout.puts "request made"
    end
+   
 end
