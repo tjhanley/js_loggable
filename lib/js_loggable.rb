@@ -11,7 +11,7 @@ module JsLoggable
   end
   
   protected
-    # Returns true if the current action is supposed to run as SSL
+    # Returns true if the current action is supposed to run with JS Logging
     def js_loggable?
       (self.class.read_inheritable_attribute(:log_javascript_actions) || []).include?(action_name.to_sym)
     end
