@@ -9,10 +9,51 @@ Status
 ======
 This is _not_ a functional plugin yet. I have the a ways to go before this is even Alpha. This will for sure break stuff if you install it.
 
+TODO
+======
+• Make the javascript agnostic. Currently it is jQuery
+• Have the partial with the js required included automatically in any template that gets rendered by an action
+• Namespace the javascript functions
+
+
 Example
 =======
+Controller you want to log javascript for
+`class Blog < ApplicationController
+  include JsLoggable
+  layout "layout"
+  
+  log_javascript :index
+  
+  def index
+  end
+  
+  def show
+  end
+  
+end`
 
-Example goes here.
+View that is generated
+`<script type="text/javascript" charset="utf-8">
+    function jsLoggableLogError(e) {
+      try {
+        $.post( '/js_loggable/new', { navigator: encodeURI(navigator.userAgent),
+                                          timestamp: encodeURI(Date()),  
+                                          errormsg: encodeURI(e),
+                                          location: window.location }
+               ); 
+        return true;
+      } catch(e) {
+        // don't error 
+        return true; 
+      }
+    }
+  window.onerror = jsLoggableLogError;
+  alert(james);
+</script>
+
+hello world`
+
 
 
 Copyright (c) 2009 Thomas Hanley, released under the MIT license
