@@ -19,40 +19,42 @@ TODO
 Example
 =======
 Controller you want to log javascript for
-`class Blog < ApplicationController
-  include JsLoggable
-  layout "layout"
+
+  class Blog < ApplicationController
+    include JsLoggable
+    layout "layout"
   
-  log_javascript :index
+    log_javascript :index
   
-  def index
+    def index
+    end
+  
+    def show
+    end
+  
   end
-  
-  def show
-  end
-  
-end`
 
 View that is generated
-`<script type="text/javascript" charset="utf-8">
-    function jsLoggableLogError(e) {
-      try {
-        $.post( '/js_loggable/new', { navigator: encodeURI(navigator.userAgent),
-                                          timestamp: encodeURI(Date()),  
-                                          errormsg: encodeURI(e),
-                                          location: window.location }
-               ); 
-        return true;
-      } catch(e) {
-        // don't error 
-        return true; 
-      }
-    }
-  window.onerror = jsLoggableLogError;
-  alert(james);
-</script>
 
-hello world`
+  &lt;script type="text/javascript" charset="utf-8"&gt;
+      function jsLoggableLogError(e) {
+        try {
+          $.post( '/js_loggable/new', { navigator: encodeURI(navigator.userAgent),
+                                            timestamp: encodeURI(Date()),  
+                                            errormsg: encodeURI(e),
+                                            location: window.location }
+                 ); 
+          return true;
+        } catch(e) {
+          // don't error 
+          return true; 
+        }
+      }
+    window.onerror = jsLoggableLogError;
+    alert(james); //this will error
+  &lt;/script&gt;
+
+  hello world
 
 
 
