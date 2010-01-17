@@ -8,8 +8,5 @@ class JsLoggableController < ApplicationController
     @@js_loggable_logger.error params.inspect
     render :text => 'true', :status => '200', :layout => false
   end
-  
-  def show
-     render :partial => "js_loggable"
-  end
+
 end
