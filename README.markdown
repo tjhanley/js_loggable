@@ -12,8 +12,10 @@ This is _not_ a functional plugin yet. I have the a ways to go before this is ev
 TODO
 ======
 • Make the javascript agnostic. Currently it is jQuery
-• Have the partial with the js required included automatically in any template that gets rendered by an action
-• Namespace the javascript functions
+
+Limitations
+===========
+Safari (WebKit) doesn't support window.onerror so this only really works in FireFox and IE
 
 
 Example
@@ -36,26 +38,48 @@ Controller you want to log javascript for
 
 View that is generated
 
+    <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+      "http://www.w3.org/TR/html4/strict.dtd">
+    <html>
+
+    <head>
+      <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+      <title>JS Loggable Sample</title>
+
+    <script src="/javascripts/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+
+
+
     <script type="text/javascript" charset="utf-8">
-      function jsLoggableLogError(e) {
-        try {
-          $.post( '/js_loggable/new', { navigator: encodeURI(navigator.userAgent),
-                                            timestamp: encodeURI(Date()),  
-                                            errormsg: encodeURI(e),
-                                            location: window.location }
-                 ); 
-          return true;
-        } catch(e) {
-          // don't error 
-          return true; 
-        }
+      window.onerror = function(msg,url,linenumber){    
+        jQuery.get( '/js_loggable/new', { navigator: encodeURI(navigator.userAgent),
+                                          linenumber: linenumber,  
+                                          errormsg: msg,
+                                          location: url }
+               );
+        return true;    
       }
-      window.onerror = jsLoggableLogError;
-      alert(james); //this will error
     </script>
 
-  hello world
+    </head>
 
+    <body id="layout.html" onload="">
+  
+      <script type="text/javascript" charset="utf-8">
+          
+      function doSomething(){
+        alert('this is supposed to do something' + )
+      }
+    </script>
 
+    I am main view. <a href="#" onclick="doSomethings()">click me</a>
+    </body>
+    </html>
+
+What is created in the logs.
+    {"navigator"=>"Mozilla/5.0%20(Macintosh;%20U;%20Intel%20Mac%20OS%20X%2010.5;%20en-US;%20rv:1.9.1.7)%20Gecko/20091221%20Firefox/3.5.7%20GTB6", "action"=>"new", "controller"=>"js_loggable", "errormsg"=>"syntax error"}
+    {"navigator"=>"Mozilla/5.0%20(Macintosh;%20U;%20Intel%20Mac%20OS%20X%2010.5;%20en-US;%20rv:1.9.1.7)%20Gecko/20091221%20Firefox/3.5.7%20GTB6", "action"=>"new", "controller"=>"js_loggable", "errormsg"=>"syntax error"}
+    {"linenumber"=>"30", "navigator"=>"Mozilla/5.0%20(Macintosh;%20U;%20Intel%20Mac%20OS%20X%2010.5;%20en-US;%20rv:1.9.1.7)%20Gecko/20091221%20Firefox/3.5.7%20GTB6", "action"=>"new", "controller"=>"js_loggable", "errormsg"=>"syntax error", "location"=>"http://js-loggable-sample.local/#"}
+    {"linenumber"=>"30", "navigator"=>"Mozilla/5.0%20(Macintosh;%20U;%20Intel%20Mac%20OS%20X%2010.5;%20en-US;%20rv:1.9.1.7)%20Gecko/20091221%20Firefox/3.5.7%20GTB6", "action"=>"new", "controller"=>"js_loggable", "errormsg"=>"syntax error", "location"=>"http://js-loggable-sample.local/#"}
 
 Copyright (c) 2009 Thomas Hanley, released under the MIT license

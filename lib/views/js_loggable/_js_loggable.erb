@@ -1,8 +1,11 @@
 
 <script type="text/javascript" charset="utf-8">
-  jQuery(window).error(function(msg,url,linenumber){    
-    console.debug(msg)
-    jQuery.get('/js_loggable/new?msg=');
+  window.onerror = function(msg,url,linenumber){    
+    jQuery.get( '/js_loggable/new', { navigator: encodeURI(navigator.userAgent),
+                                      linenumber: linenumber,  
+                                      errormsg: msg,
+                                      location: url }
+           );
     return true;    
-  });
+  }
 </script>
